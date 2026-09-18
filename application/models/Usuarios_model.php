@@ -45,4 +45,11 @@ class Usuarios_model extends CI_Model
             ->where('id', $id)
             ->update('usuarios', $usuario);
     }
+
+    public function apagar($id)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->delete('usuarios');
+    }
 }

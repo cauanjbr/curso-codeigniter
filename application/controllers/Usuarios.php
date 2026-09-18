@@ -22,6 +22,8 @@ class Usuarios extends CI_Controller
         $data['titulo'] = 'USUÁRIOS CADASTRADOS';
         $data['usuarios'] = $this->usuarios_model->listar();
         $data['atualizado'] = $this->input->get('atualizado') === '1';
+        $data['apagado'] = $this->input->get('apagado') === '1';
+        $data['erro_exclusao'] = $this->input->get('erro_exclusao') === '1';
         $usuarioLogado = $this->session->userdata('usuario_logado');
         $data['usuario_logado_id'] = (int) $usuarioLogado['id'];
 
@@ -128,8 +130,33 @@ class Usuarios extends CI_Controller
         $this->load->view('layout/rodape');
     }
 
-    // Apagar usuários
-    public function del()
+    // Apagar usuário
+    public function del($id = NULL)
     {
+        if ($this->input->method() !== 'post') {
+            show_error('A exclusão precisa ser confirmada pelo formulário.', 405, 'Método não permitido');
+        }
+
+        if ($id === NULL || !ctype_digit((string) $id)) {
+            show_error('Você precisa informar um usuário válido.', 404, 'Usuário não encontrado');
+        }
+
+        $usuarioLogado = $this->session->userdata('usuario_logado');
+
+        if ((int) $id === (int) $usuarioLogado['id']) {
+            redirect('usuarios?erro_exclusao=1');
+            return;
+        }
+
+        if (!$this->usuarios_model->buscarPorId((int) $id)) {
+            show_error('O usuário informado não existe.', 404, 'Usuário não encontrado');
+        }
+
+        if ($this->usuarios_model->apagar((int) $id)) {
+            redirect('usuarios?apagado=1');
+            return;
+        }
+
+        redirect('usuarios?erro_exclusao=1');
     }
 }
