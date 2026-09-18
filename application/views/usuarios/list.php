@@ -1,5 +1,11 @@
 <h1 class="page-title"><?= html_escape($titulo); ?></h1>
 
+<?php if ($atualizado): ?>
+    <div class="alert alert-success" role="alert">
+        Usuário atualizado com sucesso.
+    </div>
+<?php endif; ?>
+
 <?= anchor(
     'usuarios/add',
     'Add usuário',
@@ -14,6 +20,7 @@
                 <th scope="col">Nome</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Status</th>
+                <th scope="col">Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -24,11 +31,18 @@
                         <td><?= html_escape($usuario->nome); ?></td>
                         <td><?= html_escape($usuario->email); ?></td>
                         <td><?= $usuario->ativo ? 'Ativo' : 'Inativo'; ?></td>
+                        <td>
+                            <?= anchor(
+                                'usuarios/edit/' . rawurlencode($usuario->id),
+                                'Editar',
+                                array('class' => 'btn btn-primary btn-sm')
+                            ); ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4" class="text-center">Nenhum usuário cadastrado.</td>
+                    <td colspan="5" class="text-center">Nenhum usuário cadastrado.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

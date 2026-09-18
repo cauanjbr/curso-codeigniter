@@ -9,6 +9,12 @@ class Site extends CI_Controller {
 		//recursos usados pelas páginas de livros
 		$this->load->model('livros_model', 'livros');
 		$this->load->helper(array('funcoes', 'url'));
+		$this->load->library('session');
+
+		if (!$this->session->userdata('usuario_logado')) {
+			redirect('login');
+			exit;
+		}
 	}
 
 	public function index()

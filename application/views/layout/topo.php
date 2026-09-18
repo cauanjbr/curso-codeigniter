@@ -203,6 +203,12 @@
                 <input class="form-control" type="search" placeholder="Buscar" aria-label="Buscar">
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
+
+            <?php $usuarioLogado = $this->session->userdata('usuario_logado'); ?>
+            <span class="navbar-text ml-lg-3 mr-3 text-white">
+                <?= html_escape($usuarioLogado['nome']); ?>
+            </span>
+            <?= anchor('sair', 'Sair', array('class' => 'btn btn-outline-light')); ?>
         </div>
     </nav>
 
