@@ -26,11 +26,18 @@
         <tbody>
             <?php if (!empty($usuarios)): ?>
                 <?php foreach ($usuarios as $usuario): ?>
+                    <?php $estaLogado = (int) $usuario->id === $usuario_logado_id; ?>
                     <tr>
                         <td><?= html_escape($usuario->id); ?></td>
                         <td><?= html_escape($usuario->nome); ?></td>
                         <td><?= html_escape($usuario->email); ?></td>
-                        <td><?= $usuario->ativo ? 'Ativo' : 'Inativo'; ?></td>
+                        <td>
+                            <?php if ($estaLogado): ?>
+                                <span class="btn btn-success btn-sm disabled" aria-disabled="true">Ativo</span>
+                            <?php else: ?>
+                                <span class="btn btn-danger btn-sm disabled" aria-disabled="true">Inativo</span>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <?= anchor(
                                 'usuarios/edit/' . rawurlencode($usuario->id),

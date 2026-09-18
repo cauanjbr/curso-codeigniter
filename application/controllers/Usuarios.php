@@ -22,6 +22,8 @@ class Usuarios extends CI_Controller
         $data['titulo'] = 'USUÁRIOS CADASTRADOS';
         $data['usuarios'] = $this->usuarios_model->listar();
         $data['atualizado'] = $this->input->get('atualizado') === '1';
+        $usuarioLogado = $this->session->userdata('usuario_logado');
+        $data['usuario_logado_id'] = (int) $usuarioLogado['id'];
 
         $this->load->view('layout/topo', $data);
         $this->load->view('usuarios/list', $data);
