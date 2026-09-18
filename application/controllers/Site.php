@@ -13,11 +13,10 @@ class Site extends CI_Controller {
 
 	public function index()
 	{
-		//titulo
-		$data['titulo'] = 'Aula usando boostrap 4';
+		$data['titulo'] = 'Página principal';
 
-		$this->load->view('layout/topo');
-		$this->load->view('site/conteudo');
+		$this->load->view('layout/topo', $data);
+		$this->load->view('site/conteudo', $data);
 		$this->load->view('layout/rodape');
 	}
 	
@@ -113,7 +112,7 @@ class Site extends CI_Controller {
 		}
 
 		$this->load->view('layout/topo', $data);
-		$this->load->view('formulario/valida', $data);
+		$this->load->view('formulario/validar', $data);
 		$this->load->view('layout/rodape');
 	}
 }
