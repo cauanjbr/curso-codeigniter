@@ -1,26 +1,49 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-
-class Livros_model extends CI_Model {
-    
-public function listarLivros()
+class Livros_model extends CI_Model
 {
-   $query = $this->db->get('livros');
-    return $query->result();
-}
+    public function listar()
+    {
+        return $this->db
+            ->select('id, titulo, autor, preco, resumo, ativo, img')
+            ->order_by('id', 'ASC')
+            ->get('livros')
+            ->result();
+    }
 
-public function getById($id)
-{
-    $this->db->select('livros.*, resumo.resumo');
-    $this->db->from('livros');
-    $this->db->join('resumo', 'livros.ID = resumo.id_livro', 'left');
-    $this->db->where('livros.ID', $id);
-    $this->db->limit(1);
+    public function cadastrar($livro)
+    {
+        return $this->db->insert('livros', $livro);
+    }
 
-    $query = $this->db->get();
+    public function buscarPorId($id)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->limit(1)
+            ->get('livros')
+            ->row();
+    }
 
-    return $query->row();
-}
+    public function atualizar($id, $livro)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->update('livros', $livro);
+    }
 
+    public function apagar($id)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->delete('livros');
+    }
+
+    public function alterarStatus($id, $ativo)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->update('livros', array('ativo' => (int) $ativo));
+    }
 }

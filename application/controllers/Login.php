@@ -14,7 +14,7 @@ class Login extends CI_Controller
     public function index()
     {
         if ($this->session->userdata('usuario_logado')) {
-            redirect('site');
+            redirect('livros');
             return;
         }
 
@@ -39,7 +39,7 @@ class Login extends CI_Controller
                     'email' => $usuario->email
                 ));
 
-                redirect('site');
+                redirect('livros');
                 return;
             }
 
