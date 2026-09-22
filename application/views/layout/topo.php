@@ -145,6 +145,9 @@
         <div class="collapse navbar-collapse" id="menuPrincipal">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
+                    <?= anchor('catalogo', 'Catálogo', array('class' => 'nav-link')); ?>
+                </li>
+                <li class="nav-item">
                     <?= anchor('livros', 'Listar livros', array('class' => 'nav-link')); ?>
                 </li>
                 <li class="nav-item">

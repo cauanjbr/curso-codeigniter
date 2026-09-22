@@ -12,6 +12,16 @@ class Livros_model extends CI_Model
             ->result();
     }
 
+    public function listarAtivos()
+    {
+        return $this->db
+            ->select('id, titulo, autor, resumo, img')
+            ->where('ativo', 1)
+            ->order_by('id', 'ASC')
+            ->get('livros')
+            ->result();
+    }
+
     public function cadastrar($livro)
     {
         return $this->db->insert('livros', $livro);
