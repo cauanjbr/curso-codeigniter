@@ -2,7 +2,7 @@
   {
     "titulo": "Python Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Referência prática de Python, com tipos de dados, condições, laços, listas, dicionários e exemplos para consulta durante o desenvolvimento. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-python.png",
@@ -12,7 +12,7 @@
   {
     "titulo": "JavaScript Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Guia de JavaScript que reúne exemplos sobre variáveis, arrays, objetos, funções e protótipos para apoiar o desenvolvimento de aplicações web. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-javascript.png",
@@ -22,7 +22,7 @@
   {
     "titulo": "Java Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Material de consulta sobre Java, incluindo conversão de tipos, referências, getters e setters, compilação e documentação de código. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-java.png",
@@ -32,7 +32,7 @@
   {
     "titulo": "C# Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Coletânea de exemplos de C#, abordando operadores, condições, comparação de objetos e tratamento de valores nulos. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-csharp.png",
@@ -42,7 +42,7 @@
   {
     "titulo": "C++ Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Referência de C++ com fundamentos da linguagem, literais, precedência de operadores, aritmética de ponto flutuante e manipulação de bits. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-cplusplus.png",
@@ -52,7 +52,7 @@
   {
     "titulo": "PHP Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Guia prático de PHP com exemplos de variáveis, escopo, superglobais e constantes, útil para consultar conceitos no desenvolvimento web. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-php.png",
@@ -62,7 +62,7 @@
   {
     "titulo": "Ruby Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Material de apoio para programação em Ruby, com conversão de tipos, operadores, escopo de variáveis e constantes. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-ruby.png",
@@ -72,7 +72,7 @@
   {
     "titulo": "Kotlin Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Introdução e referência de Kotlin, com fundamentos da linguagem, strings, arrays, coleções, enumerações e funções. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-kotlin.png",
@@ -82,7 +82,7 @@
   {
     "titulo": "C Notes for Professionals",
     "autor": "Colaboradores do Stack Overflow; organização: GoalKicker",
-    "preco": 0,
+    "preco": 40,
     "resumo": "Coletânea de programação em C com exemplos de tipos de dados, operadores, valores booleanos, strings e literais. E-book gratuito em inglês.",
     "ativo": 1,
     "img": "goalkicker-c.png",
