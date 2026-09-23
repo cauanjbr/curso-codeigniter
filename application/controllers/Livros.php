@@ -23,6 +23,17 @@ class Livros extends MY_Controller
         $data['titulo_pagina'] = 'Crud livros v. 1.0.0';
         $data['livros'] = $this->livros_model->listar();
 
+        // Miniatura da capa na lista (só para arquivos que existem em uploads/livros)
+        foreach ($data['livros'] as $livro) {
+            $livro->capa_url = NULL;
+
+            if (!empty($livro->img)
+                && basename($livro->img) === $livro->img
+                && is_file(FCPATH . 'uploads/livros/' . $livro->img)) {
+                $livro->capa_url = base_url('uploads/livros/' . rawurlencode($livro->img));
+            }
+        }
+
         $this->load->view('layout/topo', $data);
         $this->load->view('livros/index', $data);
         $this->load->view('layout/rodape');

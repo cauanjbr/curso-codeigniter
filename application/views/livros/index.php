@@ -1,122 +1,121 @@
-<h1 class="page-title"><?= html_escape($titulo); ?></h1>
+<div class="painel-cabecalho">
+    <div>
+        <h1 class="page-title"><?= html_escape($titulo); ?></h1>
+        <p class="painel-subtitulo">
+            <?= count($livros); ?> <?= count($livros) === 1 ? 'livro cadastrado' : 'livros cadastrados'; ?>
+        </p>
+    </div>
+    <?= anchor('livros/adicionar', '+ Novo livro', array('class' => 'btn btn-success btn-lg')); ?>
+</div>
 
 <?php $this->load->view('layout/aviso'); ?>
 
-<style>
-    #tabelaLivros {
-        font-size: 18px;
-    }
+<div class="painel-ferramentas">
+    <label class="painel-busca" for="pesquisarLivros">
+        <span class="sr-only">Pesquisar livros</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input
+            class="form-control"
+            type="search"
+            id="pesquisarLivros"
+            placeholder="Pesquisar por título, autor ou preço"
+            autocomplete="off"
+        >
+    </label>
 
-    #tabelaLivros th,
-    #tabelaLivros td {
-        padding: 14px 16px;
-        vertical-align: middle;
-    }
-
-    #tabelaLivros .badge {
-        padding: 6px 8px;
-        font-size: 14px;
-    }
-</style>
-
-<div class="text-right mb-5">
-    <?= anchor('livros/adicionar', 'Novo livro', array('class' => 'btn btn-success btn-lg')); ?>
+    <label for="livrosPorPagina">
+        <select class="form-control d-inline-block mr-2" id="livrosPorPagina" style="width: 90px;">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+        </select>
+        por página
+    </label>
 </div>
 
-<div class="row align-items-center mb-3">
-    <div class="col-12 col-md-6 mb-3 mb-md-0">
-        <label class="mb-0" for="livrosPorPagina">
-            <select class="form-control d-inline-block mr-2" id="livrosPorPagina" style="width: 105px;">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-            </select>
-            resultados por página
-        </label>
-    </div>
-
-    <div class="col-12 col-md-6">
-        <div class="form-inline justify-content-md-end">
-            <label class="mr-2" for="pesquisarLivros">Pesquisar</label>
-            <input
-                class="form-control"
-                type="search"
-                id="pesquisarLivros"
-                autocomplete="off"
-                style="width: 245px;"
-            >
-        </div>
-    </div>
-</div>
-
-<div class="table-responsive">
-    <table class="table table-hover" id="tabelaLivros">
-        <thead>
-            <tr>
-                <th scope="col" data-coluna="id"># <span class="text-muted">↕</span></th>
-                <th scope="col" data-coluna="titulo">Título <span class="text-muted">↕</span></th>
-                <th scope="col" data-coluna="autor">Autor <span class="text-muted">↕</span></th>
-                <th scope="col" data-coluna="preco" class="text-right">Preço <span class="text-muted">↕</span></th>
-                <th scope="col" data-coluna="ativo">Status <span class="text-muted">↕</span></th>
-                <th scope="col" class="text-right">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($livros as $livro): ?>
-                <?php $precoFormatado = 'R$ ' . number_format((float) $livro->preco, 2, ',', '.'); ?>
-                <tr
-                    data-livro
-                    data-id="<?= (int) $livro->id; ?>"
-                    data-titulo="<?= html_escape($livro->titulo); ?>"
-                    data-autor="<?= html_escape($livro->autor); ?>"
-                    data-preco="<?= html_escape($livro->preco); ?>"
-                    data-ativo="<?= (int) $livro->ativo; ?>"
-                    data-pesquisa="<?= html_escape($livro->titulo . ' ' . $livro->autor . ' ' . $livro->preco . ' ' . $precoFormatado); ?>"
-                >
-                    <td><?= (int) $livro->id; ?></td>
-                    <td><?= html_escape($livro->titulo); ?></td>
-                    <td><?= html_escape($livro->autor); ?></td>
-                    <td class="text-right text-nowrap"><?= html_escape($precoFormatado); ?></td>
-                    <td>
-                        <?php if ((int) $livro->ativo === 1): ?>
-                            <span class="badge badge-success">Ativo</span>
-                        <?php else: ?>
-                            <span class="badge badge-danger">Inativo</span>
-                        <?php endif; ?>
-                    </td>
-                    <td class="text-right text-nowrap">
-                        <?= anchor(
-                            'livros/editar/' . (int) $livro->id,
-                            'Editar',
-                            array('class' => 'btn btn-primary')
-                        ); ?>
-                        <?= form_open(
-                            'livros/apagar/' . (int) $livro->id,
-                            array('class' => 'd-inline formulario-apagar')
-                        ); ?>
-                            <button class="btn btn-danger" type="submit">Apagar</button>
-                        <?= form_close(); ?>
-
-                        <?= form_open(
-                            'livros/alterarStatus/' . (int) $livro->id,
-                            array('class' => 'd-inline')
-                        ); ?>
-                            <button class="btn btn-info" type="submit">
-                                <?= (int) $livro->ativo === 1 ? 'Desativar' : 'Ativar'; ?>
-                            </button>
-                        <?= form_close(); ?>
-                    </td>
+<div class="painel-cartao">
+    <div class="table-responsive">
+        <table class="table table-hover" id="tabelaLivros">
+            <thead>
+                <tr>
+                    <th scope="col" data-coluna="id"># <span class="text-muted">↕</span></th>
+                    <th scope="col" data-coluna="titulo">Livro <span class="text-muted">↕</span></th>
+                    <th scope="col" data-coluna="autor" class="d-none d-lg-table-cell">Autor <span class="text-muted">↕</span></th>
+                    <th scope="col" data-coluna="preco" class="text-right">Preço <span class="text-muted">↕</span></th>
+                    <th scope="col" data-coluna="ativo">Status <span class="text-muted">↕</span></th>
+                    <th scope="col" class="text-right">Ações</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php foreach ($livros as $livro): ?>
+                    <?php $precoFormatado = 'R$ ' . number_format((float) $livro->preco, 2, ',', '.'); ?>
+                    <tr
+                        data-livro
+                        data-id="<?= (int) $livro->id; ?>"
+                        data-titulo="<?= html_escape($livro->titulo); ?>"
+                        data-autor="<?= html_escape($livro->autor); ?>"
+                        data-preco="<?= html_escape($livro->preco); ?>"
+                        data-ativo="<?= (int) $livro->ativo; ?>"
+                        data-pesquisa="<?= html_escape($livro->titulo . ' ' . $livro->autor . ' ' . $livro->preco . ' ' . $precoFormatado); ?>"
+                    >
+                        <td class="text-muted"><?= (int) $livro->id; ?></td>
+                        <td>
+                            <div class="item-lista">
+                                <?php if ($livro->capa_url !== NULL): ?>
+                                    <img class="capa-mini" src="<?= html_escape($livro->capa_url); ?>" alt="" width="44" height="62" loading="lazy">
+                                <?php else: ?>
+                                    <span class="capa-mini capa-mini--vazia" aria-hidden="true"><?= html_escape(mb_strtoupper(mb_substr($livro->titulo, 0, 1))); ?></span>
+                                <?php endif; ?>
+                                <span>
+                                    <span class="item-lista__titulo"><?= html_escape($livro->titulo); ?></span>
+                                    <span class="item-lista__detalhe d-lg-none"><?= html_escape($livro->autor); ?></span>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="d-none d-lg-table-cell text-muted"><?= html_escape($livro->autor); ?></td>
+                        <td class="text-right text-nowrap"><?= html_escape($precoFormatado); ?></td>
+                        <td>
+                            <?php if ((int) $livro->ativo === 1): ?>
+                                <span class="badge badge-success">Ativo</span>
+                            <?php else: ?>
+                                <span class="badge badge-danger">Inativo</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="text-right text-nowrap">
+                            <?= anchor(
+                                'livros/editar/' . (int) $livro->id,
+                                'Editar',
+                                array('class' => 'btn btn-primary btn-sm')
+                            ); ?>
 
-            <tr id="nenhumLivro" hidden>
-                <td colspan="6" class="text-center">Nenhum livro encontrado.</td>
-            </tr>
-        </tbody>
-    </table>
+                            <?= form_open(
+                                'livros/alterarStatus/' . (int) $livro->id,
+                                array('class' => 'd-inline')
+                            ); ?>
+                                <button class="btn btn-info btn-sm" type="submit">
+                                    <?= (int) $livro->ativo === 1 ? 'Desativar' : 'Ativar'; ?>
+                                </button>
+                            <?= form_close(); ?>
+
+                            <?= form_open(
+                                'livros/apagar/' . (int) $livro->id,
+                                array('class' => 'd-inline formulario-apagar')
+                            ); ?>
+                                <button class="btn btn-danger btn-sm" type="submit">Apagar</button>
+                            <?= form_close(); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+                <tr id="nenhumLivro" hidden>
+                    <td colspan="6" class="text-center text-muted py-5">Nenhum livro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="row align-items-center">
+<div class="row align-items-center painel-rodape-lista">
     <div class="col-12 col-md-6 mb-3 mb-md-0">
         <span id="resumoLivros"></span>
     </div>
@@ -148,6 +147,11 @@
             });
         });
 
+        // Minúsculas e sem acentos, como na busca do catálogo
+        function normalizar(texto) {
+            return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase('pt-BR');
+        }
+
         function criarBotaoPaginacao(texto, pagina, desabilitado, ativo) {
             var item = document.createElement('li');
             var botao = document.createElement('button');
@@ -177,10 +181,10 @@
         }
 
         function atualizarTabela() {
-            var termo = pesquisa.value.trim().toLocaleLowerCase('pt-BR');
+            var termo = normalizar(pesquisa.value.trim());
             var limite = Number(porPagina.value);
             var filtradas = linhas.filter(function (linha) {
-                return linha.getAttribute('data-pesquisa').toLocaleLowerCase('pt-BR').indexOf(termo) !== -1;
+                return normalizar(linha.getAttribute('data-pesquisa')).indexOf(termo) !== -1;
             });
 
             if (colunaOrdenada) {
