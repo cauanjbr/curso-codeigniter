@@ -18,7 +18,7 @@ class Livros_model extends CI_Model
     public function listarAtivos()
     {
         return $this->db
-            ->select('id, titulo, autor, resumo, img')
+            ->select('id, titulo, autor, preco, resumo, img')
             ->where('ativo', 1)
             ->order_by('id', 'ASC')
             ->get('livros')
