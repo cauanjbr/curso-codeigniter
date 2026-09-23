@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * @property CI_DB_query_builder $db
+ */
 class Migration_Atualizar_dados_usuarios extends CI_Migration
 {
     public function up()

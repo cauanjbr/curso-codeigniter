@@ -1,6 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * @property CI_Loader          $load
+ * @property CI_Input           $input
+ * @property CI_Session         $session
+ * @property CI_Form_validation $form_validation
+ * @property CI_Upload          $upload
+ * @property Livros_model       $livros_model
+ */
 class Livros extends CI_Controller
 {
     public function __construct()

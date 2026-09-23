@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * @property CI_Loader    $load
+ * @property Livros_model $livros_model
+ */
 class Catalogo extends CI_Controller
 {
     public function index()

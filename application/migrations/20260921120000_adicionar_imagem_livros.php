@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * @property CI_DB_query_builder $db
+ * @property CI_DB_forge         $dbforge
+ */
 class Migration_Adicionar_imagem_livros extends CI_Migration
 {
     public function up()
