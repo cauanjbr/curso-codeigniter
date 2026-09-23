@@ -23,7 +23,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/curso/';
+// Monta o endereço a partir da pasta onde o projeto está (ex.: /curso/),
+// assim ele funciona em qualquer pasta do htdocs sem editar este arquivo.
+// O host continua fixo para evitar ataques com o cabeçalho Host.
+$config['base_url'] = 'http://localhost'
+    . rtrim(str_replace('\\', '/', dirname(isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '/index.php')), '/')
+    . '/';
 
 /*
 |--------------------------------------------------------------------------
