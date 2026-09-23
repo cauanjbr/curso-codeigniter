@@ -4,7 +4,7 @@
 
 <?= anchor(
     'usuarios/add',
-    'Add usuário',
+    'Novo usuário',
     array('title' => 'Cadastrar usuário', 'class' => 'btn btn-success btn-lg mb-2')
 ); ?>
 
@@ -43,24 +43,36 @@
                         <td><?= html_escape($usuario->nome); ?></td>
                         <td><?= html_escape($usuario->email); ?></td>
                         <td>
-                            <?php if ($estaLogado): ?>
-                                <span class="btn btn-success btn-sm disabled" aria-disabled="true">Ativo</span>
+                            <?php if ((int) $usuario->ativo === 1): ?>
+                                <span class="badge badge-success">Ativo</span>
                             <?php else: ?>
-                                <span class="btn btn-danger btn-sm disabled" aria-disabled="true">Inativo</span>
+                                <span class="badge badge-danger">Inativo</span>
+                            <?php endif; ?>
+                            <?php if ($estaLogado): ?>
+                                <span class="badge badge-secondary">Você</span>
                             <?php endif; ?>
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                             <?= anchor(
-                                'usuarios/edit/' . rawurlencode($usuario->id),
+                                'usuarios/edit/' . (int) $usuario->id,
                                 'Editar',
                                 array('class' => 'btn btn-primary btn-sm mr-1')
                             ); ?>
 
                             <?php if ($estaLogado): ?>
+                                <button class="btn btn-info btn-sm" type="button" disabled title="A conta conectada não pode ser desativada">
+                                    Desativar
+                                </button>
                                 <button class="btn btn-danger btn-sm" type="button" disabled title="A conta conectada não pode ser apagada">
                                     Apagar
                                 </button>
                             <?php else: ?>
+                                <?= form_open('usuarios/status/' . (int) $usuario->id, array('class' => 'd-inline')); ?>
+                                    <button class="btn btn-info btn-sm" type="submit">
+                                        <?= (int) $usuario->ativo === 1 ? 'Desativar' : 'Ativar'; ?>
+                                    </button>
+                                <?= form_close(); ?>
+
                                 <?= form_open(
                                     'usuarios/del/' . (int) $usuario->id,
                                     array(

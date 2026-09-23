@@ -49,6 +49,13 @@ class Usuarios_model extends CI_Model
             ->update('usuarios', $usuario);
     }
 
+    public function alterarStatus($id, $ativo)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->update('usuarios', array('ativo' => (int) $ativo));
+    }
+
     public function apagar($id)
     {
         return $this->db

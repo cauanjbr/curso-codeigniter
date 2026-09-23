@@ -79,13 +79,25 @@ class Usuarios extends MY_Controller
         $this->form_validation->set_rules('nome', 'Nome', 'trim|required|min_length[3]|max_length[45]');
         $this->form_validation->set_rules('email', 'E-mail', $regraEmail);
 
+        // Senha é opcional na edição: só valida se o campo foi preenchido
+        $trocarSenha = (string) $this->input->post('nova_senha') !== '';
+        if ($trocarSenha) {
+            $this->form_validation->set_rules('nova_senha', 'Nova senha', 'required|min_length[3]|max_length[72]');
+            $this->form_validation->set_rules('repita_nova_senha', 'Repita a nova senha', 'required|matches[nova_senha]');
+        }
+
         $this->form_validation->set_message('is_unique', 'Este {field} já está cadastrado.');
+        $this->form_validation->set_message('matches', 'As senhas precisam ser iguais.');
 
         if ($this->form_validation->run() === TRUE) {
             $dados = array(
                 'nome' => $this->input->post('nome', TRUE),
                 'email' => $this->input->post('email', TRUE)
             );
+
+            if ($trocarSenha) {
+                $dados['senha'] = password_hash($this->input->post('nova_senha'), PASSWORD_DEFAULT);
+            }
 
             if ($this->usuarios_model->atualizar((int) $usuario->id, $dados)) {
                 $this->avisar('success', 'Usuário atualizado com sucesso.');
@@ -99,6 +111,29 @@ class Usuarios extends MY_Controller
         $this->load->view('layout/topo', $data);
         $this->load->view('usuarios/edit', $data);
         $this->load->view('layout/rodape');
+    }
+
+    // Ativar ou desativar usuário
+    public function status($id = NULL)
+    {
+        $this->exigirPost('A alteração de status precisa ser enviada pelo formulário.');
+        $usuario = $this->buscarUsuario($id);
+
+        if ((int) $usuario->id === $this->usuarioLogado['id']) {
+            $this->avisar('danger', 'Não é possível desativar a conta que está conectada.');
+            redirect('usuarios');
+            return;
+        }
+
+        $novoStatus = (int) $usuario->ativo === 1 ? 0 : 1;
+
+        if ($this->usuarios_model->alterarStatus((int) $usuario->id, $novoStatus)) {
+            $this->avisar('success', $novoStatus === 1 ? 'Usuário ativado com sucesso.' : 'Usuário desativado com sucesso.');
+        } else {
+            $this->avisar('danger', 'Não foi possível alterar o status do usuário. Tente novamente.');
+        }
+
+        redirect('usuarios');
     }
 
     // Apagar usuário

@@ -32,6 +32,33 @@
                 <?= form_error('email'); ?>
             </div>
 
+            <fieldset class="border rounded p-3 mb-3">
+                <legend class="w-auto px-2 mb-0 h6">Trocar senha (opcional)</legend>
+
+                <div class="form-group">
+                    <?= form_label('Nova senha', 'nova_senha'); ?>
+                    <?= form_password(array(
+                        'name' => 'nova_senha',
+                        'id' => 'nova_senha',
+                        'class' => 'form-control',
+                        'autocomplete' => 'new-password'
+                    )); ?>
+                    <?= form_error('nova_senha'); ?>
+                </div>
+
+                <div class="form-group mb-0">
+                    <?= form_label('Repita a nova senha', 'repita_nova_senha'); ?>
+                    <?= form_password(array(
+                        'name' => 'repita_nova_senha',
+                        'id' => 'repita_nova_senha',
+                        'class' => 'form-control',
+                        'autocomplete' => 'new-password'
+                    )); ?>
+                    <?= form_error('repita_nova_senha'); ?>
+                    <small class="form-text text-muted">Deixe em branco para manter a senha atual.</small>
+                </div>
+            </fieldset>
+
             <?= form_submit(
                 'submit',
                 'Salvar alterações',
