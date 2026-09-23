@@ -61,14 +61,15 @@
                                     Apagar
                                 </button>
                             <?php else: ?>
-                                <form
-                                    class="d-inline"
-                                    method="post"
-                                    action="<?= html_escape(site_url('usuarios/del/' . rawurlencode($usuario->id))); ?>"
-                                    onsubmit="return confirm('Tem certeza que deseja apagar este usuário?');"
-                                >
+                                <?= form_open(
+                                    'usuarios/del/' . (int) $usuario->id,
+                                    array(
+                                        'class' => 'd-inline',
+                                        'onsubmit' => "return confirm('Tem certeza que deseja apagar este usuário?');"
+                                    )
+                                ); ?>
                                     <button class="btn btn-danger btn-sm" type="submit">Apagar</button>
-                                </form>
+                                <?= form_close(); ?>
                             <?php endif; ?>
                         </td>
                     </tr>
