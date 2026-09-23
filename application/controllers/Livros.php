@@ -9,19 +9,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_Upload          $upload
  * @property Livros_model       $livros_model
  */
-class Livros extends CI_Controller
+class Livros extends MY_Controller
 {
     public function __construct()
     {
         parent::__construct();
         $this->load->model('livros_model');
-        $this->load->helper(array('url', 'form'));
-        $this->load->library('session');
-
-        if (!$this->session->userdata('usuario_logado')) {
-            redirect('login');
-            exit;
-        }
     }
 
     public function index()
@@ -29,11 +22,6 @@ class Livros extends CI_Controller
         $data['titulo'] = 'Lista de livros';
         $data['titulo_pagina'] = 'Crud livros v. 1.0.0';
         $data['livros'] = $this->livros_model->listar();
-        $data['cadastrado'] = $this->input->get('cadastrado') === '1';
-        $data['atualizado'] = $this->input->get('atualizado') === '1';
-        $data['apagado'] = $this->input->get('apagado') === '1';
-        $data['status_alterado'] = $this->input->get('status_alterado') === '1';
-        $data['erro_acao'] = $this->input->get('erro_acao') === '1';
 
         $this->load->view('layout/topo', $data);
         $this->load->view('livros/index', $data);
@@ -47,22 +35,7 @@ class Livros extends CI_Controller
         $data['erro'] = FALSE;
         $data['erro_upload'] = NULL;
 
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('titulo', 'Título', 'required|min_length[2]|max_length[200]|trim');
-        $this->form_validation->set_rules('autor', 'Autor', 'required|min_length[2]|max_length[150]|trim');
-        $this->form_validation->set_rules('preco', 'Valor', 'required|decimal|greater_than_equal_to[0]|trim');
-        $this->form_validation->set_rules('resumo', 'Resumo', 'required|trim');
-        $this->form_validation->set_rules('ativo', 'Ativo', 'required|in_list[0,1]');
-
-        $this->form_validation->set_message('required', 'O campo {field} é obrigatório.');
-        $this->form_validation->set_message('min_length', 'O campo {field} deve ter pelo menos {param} caracteres.');
-        $this->form_validation->set_message('max_length', 'O campo {field} deve ter no máximo {param} caracteres.');
-        $this->form_validation->set_message('decimal', 'Informe um valor válido usando ponto, por exemplo: 59.90.');
-        $this->form_validation->set_message('greater_than_equal_to', 'O campo {field} não pode ser negativo.');
-        $this->form_validation->set_message('in_list', 'Selecione uma opção válida para o campo {field}.');
-        $this->form_validation->set_error_delimiters('<small class="text-danger d-block mt-1">', '</small>');
+        $this->definirRegras();
 
         if ($this->form_validation->run() === TRUE) {
             $upload = $this->enviarImagem();
@@ -70,17 +43,12 @@ class Livros extends CI_Controller
             if (!$upload['sucesso']) {
                 $data['erro_upload'] = $upload['erro'];
             } else {
-                $livro = array(
-                    'titulo' => $this->input->post('titulo', TRUE),
-                    'autor' => $this->input->post('autor', TRUE),
-                    'preco' => $this->input->post('preco', TRUE),
-                    'resumo' => $this->input->post('resumo', TRUE),
-                    'ativo' => (int) $this->input->post('ativo'),
-                    'img' => $upload['arquivo']
-                );
+                $livro = $this->dadosDoFormulario();
+                $livro['img'] = $upload['arquivo'];
 
                 if ($this->livros_model->cadastrar($livro)) {
-                    redirect('livros?cadastrado=1');
+                    $this->avisar('success', 'Livro cadastrado com sucesso.');
+                    redirect('livros');
                     return;
                 }
 
@@ -96,15 +64,7 @@ class Livros extends CI_Controller
 
     public function editar($id = NULL)
     {
-        if ($id === NULL || !ctype_digit((string) $id)) {
-            show_error('Você precisa informar um livro válido.', 404, 'Livro não encontrado');
-        }
-
-        $livro = $this->livros_model->buscarPorId((int) $id);
-
-        if (!$livro) {
-            show_error('O livro informado não existe.', 404, 'Livro não encontrado');
-        }
+        $livro = $this->buscarLivro($id);
 
         $data['titulo'] = 'Editar livro';
         $data['titulo_pagina'] = 'Crud livros v. 1.0.0';
@@ -112,22 +72,7 @@ class Livros extends CI_Controller
         $data['erro'] = FALSE;
         $data['erro_upload'] = NULL;
 
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('titulo', 'Título', 'required|min_length[2]|max_length[200]|trim');
-        $this->form_validation->set_rules('autor', 'Autor', 'required|min_length[2]|max_length[150]|trim');
-        $this->form_validation->set_rules('preco', 'Valor', 'required|decimal|greater_than_equal_to[0]|trim');
-        $this->form_validation->set_rules('resumo', 'Resumo', 'required|trim');
-        $this->form_validation->set_rules('ativo', 'Ativo', 'required|in_list[0,1]');
-
-        $this->form_validation->set_message('required', 'O campo {field} é obrigatório.');
-        $this->form_validation->set_message('min_length', 'O campo {field} deve ter pelo menos {param} caracteres.');
-        $this->form_validation->set_message('max_length', 'O campo {field} deve ter no máximo {param} caracteres.');
-        $this->form_validation->set_message('decimal', 'Informe um valor válido usando ponto, por exemplo: 59.90.');
-        $this->form_validation->set_message('greater_than_equal_to', 'O campo {field} não pode ser negativo.');
-        $this->form_validation->set_message('in_list', 'Selecione uma opção válida para o campo {field}.');
-        $this->form_validation->set_error_delimiters('<small class="text-danger d-block mt-1">', '</small>');
+        $this->definirRegras();
 
         if ($this->form_validation->run() === TRUE) {
             $upload = $this->enviarImagem();
@@ -135,24 +80,19 @@ class Livros extends CI_Controller
             if (!$upload['sucesso']) {
                 $data['erro_upload'] = $upload['erro'];
             } else {
-                $dados = array(
-                    'titulo' => $this->input->post('titulo', TRUE),
-                    'autor' => $this->input->post('autor', TRUE),
-                    'preco' => $this->input->post('preco', TRUE),
-                    'resumo' => $this->input->post('resumo', TRUE),
-                    'ativo' => (int) $this->input->post('ativo')
-                );
+                $dados = $this->dadosDoFormulario();
 
                 if ($upload['arquivo'] !== NULL) {
                     $dados['img'] = $upload['arquivo'];
                 }
 
-                if ($this->livros_model->atualizar((int) $id, $dados)) {
+                if ($this->livros_model->atualizar((int) $livro->id, $dados)) {
                     if ($upload['arquivo'] !== NULL && $upload['arquivo'] !== $livro->img) {
                         $this->apagarImagem($livro->img);
                     }
 
-                    redirect('livros?atualizado=1');
+                    $this->avisar('success', 'Livro atualizado com sucesso.');
+                    redirect('livros');
                     return;
                 }
 
@@ -168,35 +108,40 @@ class Livros extends CI_Controller
 
     public function apagar($id = NULL)
     {
-        if ($this->input->method() !== 'post') {
-            show_error('A exclusão precisa ser confirmada pelo formulário.', 405, 'Método não permitido');
-        }
+        $this->exigirPost('A exclusão precisa ser confirmada pelo formulário.');
+        $livro = $this->buscarLivro($id);
 
-        if ($id === NULL || !ctype_digit((string) $id)) {
-            show_error('Você precisa informar um livro válido.', 404, 'Livro não encontrado');
-        }
-
-        $livro = $this->livros_model->buscarPorId((int) $id);
-
-        if (!$livro) {
-            show_error('O livro informado não existe.', 404, 'Livro não encontrado');
-        }
-
-        if ($this->livros_model->apagar((int) $id)) {
+        if ($this->livros_model->apagar((int) $livro->id)) {
             $this->apagarImagem($livro->img);
-            redirect('livros?apagado=1');
-            return;
+            $this->avisar('success', 'Livro apagado com sucesso.');
+        } else {
+            $this->avisar('danger', 'Não foi possível apagar o livro. Tente novamente.');
         }
 
-        redirect('livros?erro_acao=1');
+        redirect('livros');
     }
 
     public function alterarStatus($id = NULL)
     {
-        if ($this->input->method() !== 'post') {
-            show_error('A alteração de status precisa ser enviada pelo formulário.', 405, 'Método não permitido');
+        $this->exigirPost('A alteração de status precisa ser enviada pelo formulário.');
+        $livro = $this->buscarLivro($id);
+
+        $novoStatus = (int) $livro->ativo === 1 ? 0 : 1;
+
+        if ($this->livros_model->alterarStatus((int) $livro->id, $novoStatus)) {
+            $this->avisar('success', $novoStatus === 1 ? 'Livro ativado com sucesso.' : 'Livro desativado com sucesso.');
+        } else {
+            $this->avisar('danger', 'Não foi possível alterar o status do livro. Tente novamente.');
         }
 
+        redirect('livros');
+    }
+
+    /**
+     * Valida o id da URL e devolve o livro, ou mostra erro 404.
+     */
+    private function buscarLivro($id)
+    {
         if ($id === NULL || !ctype_digit((string) $id)) {
             show_error('Você precisa informar um livro válido.', 404, 'Livro não encontrado');
         }
@@ -207,14 +152,37 @@ class Livros extends CI_Controller
             show_error('O livro informado não existe.', 404, 'Livro não encontrado');
         }
 
-        $novoStatus = (int) $livro->ativo === 1 ? 0 : 1;
+        return $livro;
+    }
 
-        if ($this->livros_model->alterarStatus((int) $id, $novoStatus)) {
-            redirect('livros?status_alterado=1');
-            return;
-        }
+    /**
+     * Regras do formulário de livro, usadas no cadastro e na edição.
+     * As mensagens comuns vêm de language/portuguese-br/form_validation_lang.php.
+     */
+    private function definirRegras()
+    {
+        $this->load->library('form_validation');
 
-        redirect('livros?erro_acao=1');
+        $this->form_validation->set_rules('titulo', 'Título', 'trim|required|min_length[2]|max_length[200]');
+        $this->form_validation->set_rules('autor', 'Autor', 'trim|required|min_length[2]|max_length[150]');
+        $this->form_validation->set_rules('preco', 'Valor', 'trim|required|decimal|greater_than_equal_to[0]');
+        $this->form_validation->set_rules('resumo', 'Resumo', 'trim|required');
+        $this->form_validation->set_rules('ativo', 'Ativo', 'required|in_list[0,1]');
+
+        $this->form_validation->set_message('decimal', 'Informe um valor válido usando ponto, por exemplo: 59.90.');
+        $this->form_validation->set_message('greater_than_equal_to', 'O campo {field} não pode ser negativo.');
+        $this->form_validation->set_message('in_list', 'Selecione uma opção válida para o campo {field}.');
+    }
+
+    private function dadosDoFormulario()
+    {
+        return array(
+            'titulo' => $this->input->post('titulo', TRUE),
+            'autor' => $this->input->post('autor', TRUE),
+            'preco' => $this->input->post('preco', TRUE),
+            'resumo' => $this->input->post('resumo', TRUE),
+            'ativo' => (int) $this->input->post('ativo')
+        );
     }
 
     private function enviarImagem()

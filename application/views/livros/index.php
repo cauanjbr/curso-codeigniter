@@ -1,34 +1,6 @@
 <h1 class="page-title"><?= html_escape($titulo); ?></h1>
 
-<?php if ($cadastrado): ?>
-    <div class="alert alert-success" role="alert">
-        Livro cadastrado com sucesso.
-    </div>
-<?php endif; ?>
-
-<?php if ($atualizado): ?>
-    <div class="alert alert-success" role="alert">
-        Livro atualizado com sucesso.
-    </div>
-<?php endif; ?>
-
-<?php if ($apagado): ?>
-    <div class="alert alert-success" role="alert">
-        Livro apagado com sucesso.
-    </div>
-<?php endif; ?>
-
-<?php if ($status_alterado): ?>
-    <div class="alert alert-success" role="alert">
-        Status do livro alterado com sucesso.
-    </div>
-<?php endif; ?>
-
-<?php if ($erro_acao): ?>
-    <div class="alert alert-danger" role="alert">
-        Não foi possível realizar a ação. Tente novamente.
-    </div>
-<?php endif; ?>
+<?php $this->load->view('layout/aviso'); ?>
 
 <style>
     #tabelaLivros {

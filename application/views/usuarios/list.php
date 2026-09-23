@@ -1,22 +1,6 @@
 <h1 class="page-title"><?= html_escape($titulo); ?></h1>
 
-<?php if ($atualizado): ?>
-    <div class="alert alert-success" role="alert">
-        Usuário atualizado com sucesso.
-    </div>
-<?php endif; ?>
-
-<?php if ($apagado): ?>
-    <div class="alert alert-success" role="alert">
-        Usuário apagado com sucesso.
-    </div>
-<?php endif; ?>
-
-<?php if ($erro_exclusao): ?>
-    <div class="alert alert-danger" role="alert">
-        Não é possível apagar a conta que está conectada.
-    </div>
-<?php endif; ?>
+<?php $this->load->view('layout/aviso'); ?>
 
 <?= anchor(
     'usuarios/add',

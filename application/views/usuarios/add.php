@@ -2,11 +2,7 @@
 
 <section class="row">
     <div class="col-12 col-md-5">
-        <?php if ($sucesso): ?>
-            <div class="alert alert-success" role="alert">
-                Usuário cadastrado com sucesso.
-            </div>
-        <?php endif; ?>
+        <?php $this->load->view('layout/aviso'); ?>
 
         <?php if ($erro): ?>
             <div class="alert alert-danger" role="alert">

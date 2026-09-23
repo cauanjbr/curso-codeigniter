@@ -28,10 +28,8 @@ class Login extends CI_Controller
         $data['titulo'] = 'Login';
         $data['erro'] = FALSE;
 
-        $this->form_validation->set_rules('login', 'Nome ou e-mail', 'required|trim');
+        $this->form_validation->set_rules('login', 'Nome ou e-mail', 'trim|required');
         $this->form_validation->set_rules('senha', 'Senha', 'required');
-        $this->form_validation->set_message('required', 'O campo {field} é obrigatório.');
-        $this->form_validation->set_error_delimiters('<small class="text-danger d-block mt-1">', '</small>');
 
         if ($this->form_validation->run() === TRUE) {
             $login = $this->input->post('login', TRUE);
