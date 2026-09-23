@@ -63,6 +63,7 @@
         </thead>
         <tbody>
             <?php foreach ($livros as $livro): ?>
+                <?php $precoFormatado = 'R$ ' . number_format((float) $livro->preco, 2, ',', '.'); ?>
                 <tr
                     data-livro
                     data-id="<?= (int) $livro->id; ?>"
@@ -70,12 +71,12 @@
                     data-autor="<?= html_escape($livro->autor); ?>"
                     data-preco="<?= html_escape($livro->preco); ?>"
                     data-ativo="<?= (int) $livro->ativo; ?>"
-                    data-pesquisa="<?= html_escape($livro->titulo . ' ' . $livro->autor . ' ' . $livro->preco); ?>"
+                    data-pesquisa="<?= html_escape($livro->titulo . ' ' . $livro->autor . ' ' . $livro->preco . ' ' . $precoFormatado); ?>"
                 >
                     <td><?= (int) $livro->id; ?></td>
                     <td><?= html_escape($livro->titulo); ?></td>
                     <td><?= html_escape($livro->autor); ?></td>
-                    <td class="text-right"><?= number_format((float) $livro->preco, 2, '.', ''); ?></td>
+                    <td class="text-right text-nowrap"><?= html_escape($precoFormatado); ?></td>
                     <td>
                         <?php if ((int) $livro->ativo === 1): ?>
                             <span class="badge badge-success">Ativo</span>

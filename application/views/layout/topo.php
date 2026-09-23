@@ -34,20 +34,8 @@
             font-size: 21px;
         }
 
-        .navbar-search .form-control {
-            width: 290px;
-            height: 55px;
-            padding-right: 18px;
-            padding-left: 18px;
-            font-size: 20px;
-        }
-
-        .navbar-search .btn {
-            height: 55px;
-            margin-left: 12px;
-            padding-right: 24px;
-            padding-left: 24px;
-            font-size: 20px;
+        .top-navbar .navbar-text {
+            font-size: 18px;
         }
 
         .page-shell {
@@ -92,16 +80,6 @@
             .top-navbar {
                 min-height: auto;
             }
-
-            .navbar-search {
-                margin-top: 12px;
-                margin-bottom: 5px;
-            }
-
-            .navbar-search .form-control {
-                width: auto;
-                flex: 1;
-            }
         }
 
         @media (max-width: 767.98px) {
@@ -134,6 +112,17 @@
         }
     </style>
 </head>
+<?php
+// Destaca no menu a seção aberta (livros ou usuarios)
+$secaoAtual = $this->uri->segment(1);
+$classeMenu = function ($secao) use ($secaoAtual) {
+    return array(
+        'class' => 'nav-link' . ($secaoAtual === $secao ? ' active' : ''),
+        'aria-current' => $secaoAtual === $secao ? 'page' : 'false'
+    );
+};
+$usuarioLogado = $this->session->userdata('usuario_logado');
+?>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark top-navbar">
         <?= anchor('livros', 'Cursos IsmWeb', array('class' => 'navbar-brand')); ?>
@@ -148,29 +137,29 @@
                     <?= anchor('catalogo', 'Catálogo', array('class' => 'nav-link')); ?>
                 </li>
                 <li class="nav-item">
-                    <?= anchor('livros', 'Listar livros', array('class' => 'nav-link')); ?>
+                    <?= anchor('livros', 'Listar livros', $classeMenu('livros')); ?>
                 </li>
                 <li class="nav-item">
-                    <?= anchor('usuarios', 'Listar usuários', array('class' => 'nav-link')); ?>
+                    <?= anchor('usuarios', 'Listar usuários', $classeMenu('usuarios')); ?>
                 </li>
                 <li class="nav-item">
                     <?= anchor('sair', 'Sair', array('class' => 'nav-link')); ?>
                 </li>
             </ul>
 
-            <form class="form-inline navbar-search" onsubmit="return false;">
-                <input class="form-control" type="search" placeholder="Buscar" aria-label="Buscar">
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>
-
+            <?php if (!empty($usuarioLogado['nome'])): ?>
+                <span class="navbar-text">
+                    Conectado como <strong class="text-white"><?= html_escape($usuarioLogado['nome']); ?></strong>
+                </span>
+            <?php endif; ?>
         </div>
     </nav>
 
     <div class="page-shell">
         <aside class="sidebar">
             <nav class="nav flex-column">
-                <?= anchor('livros', 'Listar livros', array('class' => 'nav-link')); ?>
-                <?= anchor('usuarios', 'Listar usuários', array('class' => 'nav-link')); ?>
+                <?= anchor('livros', 'Listar livros', $classeMenu('livros')); ?>
+                <?= anchor('usuarios', 'Listar usuários', $classeMenu('usuarios')); ?>
                 <?= anchor('sair', 'Sair', array('class' => 'nav-link')); ?>
             </nav>
         </aside>
