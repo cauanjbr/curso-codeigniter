@@ -31,5 +31,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/tests/
 /tests/results/
 
-# Configuração local do banco de dados
+# ConfiguraÃ§Ã£o local do banco de dados (modelo em database.example.php)
 application/config/database.php
