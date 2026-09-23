@@ -165,12 +165,12 @@ class Livros extends MY_Controller
 
         $this->form_validation->set_rules('titulo', 'Título', 'trim|required|min_length[2]|max_length[200]');
         $this->form_validation->set_rules('autor', 'Autor', 'trim|required|min_length[2]|max_length[150]');
-        $this->form_validation->set_rules('preco', 'Valor', 'trim|required|decimal|greater_than_equal_to[0]');
+        // Aceita 59, 59.9 e 59.90; a regra "decimal" do CodeIgniter recusava valores sem centavos
+        $this->form_validation->set_rules('preco', 'Valor', 'trim|required|regex_match[/^\d{1,13}(\.\d{1,2})?$/]');
         $this->form_validation->set_rules('resumo', 'Resumo', 'trim|required');
         $this->form_validation->set_rules('ativo', 'Ativo', 'required|in_list[0,1]');
 
-        $this->form_validation->set_message('decimal', 'Informe um valor válido usando ponto, por exemplo: 59.90.');
-        $this->form_validation->set_message('greater_than_equal_to', 'O campo {field} não pode ser negativo.');
+        $this->form_validation->set_message('regex_match', 'Informe um valor positivo usando ponto, por exemplo: 59 ou 59.90.');
         $this->form_validation->set_message('in_list', 'Selecione uma opção válida para o campo {field}.');
     }
 
